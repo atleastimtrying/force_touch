@@ -1,0 +1,60 @@
+<html>
+  <head>
+    <style >
+      *{
+        margin:0;
+        padding:0;
+        box-sizing:border-box;
+      }
+      .container{
+        border: 3px solid black;
+        background:lightgrey;
+      }
+      .indicator{
+        height: 40px;
+        width: 100%;
+        border-right: 3px solid black;
+        background:green;
+        transition:background 0.1s, width 0.1s;
+      }
+      .indicator.click{
+        background:orange;
+      }
+      .indicator.force_click{
+        background:red;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="indicator"></div>
+    </div>
+    <script>
+      window.onload = function(){
+        var indicator = document.querySelector('.indicator');
+
+        var measure_force = function (event) {
+          event.preventDefault();
+          var force = event.webkitForce;
+          var width = force / 3 * 100 + '%';
+          if(force <= 1){
+            indicator.classList.remove('click');
+            indicator.classList.remove('force_click');
+          }
+          if(force > 1 && force < 2){
+            indicator.classList.add('click');
+            indicator.classList.remove('force_click');
+          }
+          if(force >= 2){
+            indicator.classList.remove('click');
+            indicator.classList.add('force_click');
+          }
+          indicator.style.width = width;
+        };
+        ("mousemove mousedown mouseup click webkitmouseforcewillbegin webkitmouseforcedown webkitmouseforceup webkitmouseforcechanged".split(" ")).forEach(function(event_name){
+          window.addEventListener(event_name, measure_force);
+        });
+      }
+    </script>
+  </body>
+</html>
